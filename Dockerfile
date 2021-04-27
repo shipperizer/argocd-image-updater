@@ -1,5 +1,7 @@
 FROM golang:1.23 AS builder
 
+LABEL org.opencontainers.image.source=https://github.com/shipperizer/argocd-image-updater
+
 RUN mkdir -p /src/argocd-image-updater
 WORKDIR /src/argocd-image-updater
 # cache dependencies as a layer for faster rebuilds
@@ -16,6 +18,7 @@ RUN apk update && \
     apk upgrade && \
     apk add ca-certificates git openssh-client aws-cli tini gpg && \
     rm -rf /var/cache/apk/*
+LABEL org.opencontainers.image.source=https://github.com/shipperizer/argocd-image-updater
 
 RUN mkdir -p /usr/local/bin
 RUN mkdir -p /app/config
