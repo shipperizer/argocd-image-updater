@@ -9,6 +9,15 @@ COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
 
+ARG SKAFFOLD_GO_GCFLAGS
+ARG TARGETOS
+ARG TARGETARCH
+
+ENV GOOS=$TARGETOS
+ENV GOARCH=$TARGETARCH
+ENV GO111MODULE=on
+ENV CGO_ENABLED=0
+
 RUN mkdir -p dist && \
 	make controller
 
