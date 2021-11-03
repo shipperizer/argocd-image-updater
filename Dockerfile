@@ -1,4 +1,4 @@
-FROM golang:1.23 AS builder
+FROM --platform=$BUILDPLATFORM golang:1.23 AS builder
 
 LABEL org.opencontainers.image.source=https://github.com/shipperizer/argocd-image-updater
 
@@ -12,12 +12,16 @@ COPY . .
 RUN mkdir -p dist && \
 	make controller
 
-FROM alpine:3.20
+FROM --platform=$BUILDPLATFORM alpine:3.20
 
 RUN apk update && \
     apk upgrade && \
-    apk add ca-certificates git openssh-client aws-cli tini gpg && \
+    apk add git openssh-client gpg tini ca-certificates && \
+    # python3 py3-pip && \
+    # pip3 install --upgrade pip && \
+    # pip3 install awscli && \
     rm -rf /var/cache/apk/*
+
 LABEL org.opencontainers.image.source=https://github.com/shipperizer/argocd-image-updater
 
 RUN mkdir -p /usr/local/bin
